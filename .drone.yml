@@ -3,7 +3,7 @@ workspace:
 
 pipeline:
   
-  build-docker-image:
+  build-release-image:
     image: plugins/docker
     group: docker-build
     repo: shaggyd/DarkCloud
@@ -18,7 +18,7 @@ pipeline:
       event: push
     secrets: [ docker_username, docker_password ]
 
-  build-docker-image:
+  build-branch-image:
     image: plugins/docker
     group: docker-build
     repo: projectthanos/crux-python3
