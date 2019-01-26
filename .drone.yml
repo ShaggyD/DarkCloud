@@ -1,45 +1,14 @@
 workspace:
-  base: /crux-python3/
-  path: .
+  base: /DarkCloud/
 
 pipeline:
-  test:
-    image: projectthanos/crux-python3:drone-base
-    group: code-standards
-    commands:
-      - pip install -r testing_requirements.txt
-      - pip freeze
-      - coverage run -m --source=. unittest discover
-      - export COVERALLS_REPO_TOKEN=bHafhRA1mTkRNXIFQQvrgQ3Cyiq6piQE7
-      - export CI_BRANCH=${DRONE_COMMIT_BRANCH}
-      - export CI_NAME='Drone'
-      - export CI_BUILD_NUMBER=${DRONE_BUILD_NUMBER}
-      - export CI_BUILD_URL=${DRONE_BUILD_LINK}
-      - export CI_PULL_REQUEST=${DRONE_PULL_REQUEST}
-      - coveralls
-      - coverage report -m
-    when:
-      event: push
-    secrets: [ docker_username, docker_password ]
-
-  code-standards:
-    image: projectthanos/crux-python3:drone-base
-    group: code-standards
-    commands:
-      - pip install -r testing_requirements.txt
-      - flake8
-      - pylint_runner -v
-    when:
-      event: push
-    secrets: [ docker_username, docker_password ]
-
+  
   build-docker-image:
     image: plugins/docker
     group: docker-build
-    repo: projectthanos/crux-python3
+    repo: shaggyd/DarkCloud
     tags:
       - ${DRONE_BRANCH}-1.${DRONE_BUILD_NUMBER}
-      - drone-base
     build_args:
       - BUILD_ID=${DRONE_BUILD_NUMBER}
       - GIT_BRANCH=${DRONE_BRANCH}
@@ -65,23 +34,3 @@ pipeline:
       branch:
         exclude: master
     secrets: [ docker_username, docker_password ]
-
-  notify-slack-releases:
-    image: plugins/slack
-    group: docker-release
-    when:
-      branch: master
-      event: push
-    environment:
-      SLACK_WEBHOOK: https://hooks.slack.com/services/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
-      PLUGIN_CHANNEL: crux-releases
-      PLUGIN_USERNAME: Drone
-      PLUGIN_ICON_URL: https://avatars2.githubusercontent.com/u/5589808?s=200&v=4
-      PLUGIN_TEMPLATE: >
-          *Repository:* crux-python3
-
-          *New Image Tag:* projectthanos/crux-python3:${DRONE_COMMIT_BRANCH}-1.{{build.number}}
-
-          *Recent Closed PR List:* https://github.com/CruxConnect/crux-python3/pulls?q=is%3Apr+is%3Aclosed
-
-          *Commit Message:* ${DRONE_COMMIT_MESSAGE}
