@@ -6,7 +6,7 @@ pipeline:
   build-release-image:
     image: plugins/docker
     group: docker-build
-    repo: shaggyd/DarkCloud
+    repo: shaggyd/darkcloud
     tags:
       - ${DRONE_BRANCH}-1.${DRONE_BUILD_NUMBER}
     build_args:
@@ -21,7 +21,7 @@ pipeline:
   build-branch-image:
     image: plugins/docker
     group: docker-build
-    repo: projectthanos/crux-python3
+    repo: shaggyd/darkcloud
     tags:
       - ${DRONE_BRANCH}
     build_args:
