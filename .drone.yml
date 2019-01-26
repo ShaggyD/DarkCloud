@@ -1,0 +1,36 @@
+workspace:
+  base: /DarkCloud/
+
+pipeline:
+  
+  build-release-image:
+    image: plugins/docker
+    group: docker-build
+    repo: shaggyd/darkcloud
+    tags:
+      - ${DRONE_BRANCH}-1.${DRONE_BUILD_NUMBER}
+    build_args:
+      - BUILD_ID=${DRONE_BUILD_NUMBER}
+      - GIT_BRANCH=${DRONE_BRANCH}
+      - GIT_COMMIT=${DRONE_COMMIT_SHA}
+    when:
+      branch: master
+      event: push
+    secrets: [ docker_username, docker_password ]
+
+  build-branch-image:
+    image: plugins/docker
+    group: docker-build
+    repo: shaggyd/darkcloud
+    tags:
+      - ${DRONE_BRANCH}
+    build_args:
+      - BUILD_ID=${DRONE_BUILD_NUMBER}
+      - GIT_BRANCH=${DRONE_BRANCH}
+      - GIT_COMMIT=${DRONE_COMMIT_SHA}
+      - GIT_TAG=${DRONE_TAG}
+    when:
+      event: push
+      branch:
+        exclude: master
+    secrets: [ docker_username, docker_password ]
