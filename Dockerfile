@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
 # Build source code
 ADD . /darkcloud-src/
 RUN cd /darkcloud-src/src/ && make
-RUN cd ../area && chmod +x startup
+RUN cd /darkcloud-src/area/ && chmod +x startup
 
 # Set runtime
 WORKDIR /darkcloud-src/area/
