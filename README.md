@@ -16,6 +16,7 @@ can't have just one or the other.
   - Ubuntu 18.04.1 LTS
   - Rasbian for use with the RaspberryPi
   - Windows 10 - [Compiles with Visual Studio 2017 Community](./doc/setup-windows.md).
+  - [Docker](https://www.docker.com/) - any OS that supports docker containers.
 
 ## Resources
 
